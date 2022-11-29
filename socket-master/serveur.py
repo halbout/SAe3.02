@@ -1,38 +1,37 @@
 import socket
-import threading
 
 try:
-    BYE = "bye"
-    ARRET = "arret"
-    reply = ""
-    data = ""
-    server_socket = socket.socket()
-    server_socket.bind(('127.0.0.1', 10000))
-    server_socket.listen(1)
-    while reply != ARRET and data != ARRET:
-        conn, address = server_socket.accept()
-        reply = data = ""
+    KILL = "kill"
+    RESET = "reset"
+    DISCONNECT = "disconnect"
+    res = ""
+    cmd = ""
+    while res != KILL and cmd != KILL:
+        server = socket.socket()
+        server.bind(('127.0.0.1', 10000))
+        server.listen(1)
+        conn, address = server.accept()
+        res = cmd = ""
 
-        while reply != BYE and data != BYE and reply != ARRET and data != ARRET:
-            data = conn.recv(1024).decode()
-            print(data)
-            if data == BYE:
-                reply = BYE
-                conn.send(reply.encode())
-            elif data == ARRET:
-                reply = ARRET
-                conn.send(reply.encode())
+        while res != KILL and cmd != KILL and res != RESET and cmd != RESET and res != DISCONNECT and cmd != DISCONNECT:
+            cmd = conn.recv(1024).decode()
+            print(cmd)
+            if cmd == DISCONNECT:
+                res = DISCONNECT
+                conn.send(res.encode())
+            elif cmd == RESET:
+                res = RESET
+                conn.send(res.encode())
+            elif cmd == KILL:
+                res = KILL
+                conn.send(res.encode())
             else:
-                start = reply = input("")
+                start = res = input("")
 
-                t1 = threading.Thread()
-                t1.start()
-                t1.join()
-
-                end = conn.send(reply.encode())
+                end = conn.send(res.encode())
 
         conn.close()
-    server_socket.close()
+        server.close()
 
 except ConnectionAbortedError:
     print("Le connexion au client a été interrompue")
