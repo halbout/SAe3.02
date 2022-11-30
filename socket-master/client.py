@@ -1,20 +1,21 @@
 import socket
 
 try:
-
-    BYE = "bye"
-    ARRET = "arret"
+    KILL = "kill"
+    RESET = "reset"
+    DISCONNECT = "disconnect"
     data = ""
-    while data != BYE and data != ARRET:
-        message = ""
-        client_socket = socket.socket()
-        client_socket.connect(('127.0.0.1', 10000))
+    message = ""
+    client = socket.socket()
+    client.connect(('127.0.0.1', 10000))
 
-        while message != BYE and message != ARRET and data != BYE and data != ARRET:
-            message = input("")
-            client_socket.send(message.encode())
+    while message != KILL and message != RESET and message != DISCONNECT and data != KILL and data != RESET and data != DISCONNECT:
+        message = input("")
+        client.send(message.encode())
+        data = client.recv(1024).decode()
+        print(data)
 
-        client_socket.close()
+    client.close()
 
 except KeyboardInterrupt:
     print("La connexion au serveur a été interrompue")
