@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QWidget, QGridLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QComboBox
 import socket
 
@@ -37,8 +38,19 @@ class Client(QMainWindow):
         help.clicked.connect(self.__actionHelp)
         self.setWindowTitle("Gestion des serveurs")
 
-    def __actionQuit(self):
-        QCoreApplication.exit(0)
+    def __actionQuit(self, _e: QCloseEvent):
+        box = QMessageBox()
+        box.setWindowTitle("Quitter")
+        box.setText("Voulez vous quitter ?")
+        box.addButton(QMessageBox.Yes)
+        box.addButton(QMessageBox.No)
+
+        ret = box.exec()
+
+        if ret == QMessageBox.Yes:
+            QCoreApplication.exit(0)
+        else:
+            _e.ignore()
 
     def __actionSend(self):
         host = "localhost"
