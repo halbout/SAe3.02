@@ -6,11 +6,14 @@ try:
     DISCONNECT = "disconnect"
     res = ""
     cmd = ""
+    host = "localhost"
+    port = 30000
+    server = socket.socket()
     while res != KILL and cmd != KILL:
-        server = socket.socket()
-        server.bind(('127.0.0.1', 10000))
+        server.bind((host, port))
+        server.listen(1)
+
         while res != KILL and cmd != KILL and res != RESET and cmd != RESET:
-            server.listen(1)
             conn, address = server.accept()
             res = cmd = ""
 
@@ -30,7 +33,11 @@ try:
                     res = input("")
 
             conn.close()
-        server.close()
+    server.close()
 
 except ConnectionAbortedError:
+    print("Le connexion au client a été interrompue")
+except ConnectionResetError:
+    print("Le connexion au client a été interrompue")
+except KeyboardInterrupt:
     print("Le connexion au client a été interrompue")
