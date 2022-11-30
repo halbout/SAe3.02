@@ -54,8 +54,7 @@ class Client(QMainWindow):
 
     def __actionHelp(self):
         self.__message = QMessageBox()
-        self.__message.setText("Dans un premier temps choisissez votre système d'exploitation via le menu déroulant.\n \nEnsuite tapez une commande dans la zone de texte approprié parmi les suivantes : RAM, CPU, IP, Name."
+        self.__message.setText("Ces indications peuvent vous aidez à mieux comprendre le fonctionnement de cette interface graphique.\n \nDans un premier temps choisissez votre système d'exploitation via le menu déroulant.\n \nEnsuite tapez une commande dans la zone de texte approprié parmi les suivantes : RAM, CPU, IP, Name."
                                "\n \nVous pouvez également tapez des commandes de création et de suppression sur les serveurs")
-        self.__message.setInformativeText("Ces indications peuvent vous aidez à mieux comprendre le fonctionnement de cette interface graphique.")
         self.__message.setWindowTitle("Guide d'utilisation")
         msg = self.__message.exec()
