@@ -1,7 +1,9 @@
 import sys
 import client
+import serveur
 
 if __name__ == "__main__":
+    serveur()
 
     print(sys.argv)
     if len(sys.argv) < 3:
