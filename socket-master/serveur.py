@@ -1,43 +1,36 @@
 import socket
 
-try:
-    KILL = "kill"
-    RESET = "reset"
-    DISCONNECT = "disconnect"
-    res = ""
-    cmd = ""
-    host = "localhost"
-    port = 30000
-    server = socket.socket()
-    while res != KILL and cmd != KILL:
-        server.bind((host, port))
+KILL = "kill"
+RESET = "reset"
+DISCONNECT = "disconnect"
+
+def serveur():
+    data = ""
+    conn = None
+    server = None
+    while data != KILL:
+        data = ""
+        server = socket.socket()
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+        server.bind(("0.0.0.0", 10000))
         server.listen(1)
-
-        while res != KILL and cmd != KILL and res != RESET and cmd != RESET:
-            conn, address = server.accept()
-            res = cmd = ""
-
-            while res != KILL and cmd != KILL and res != RESET and cmd != RESET and res != DISCONNECT and cmd != DISCONNECT:
-                cmd = conn.recv(1024).decode()
-                print(cmd)
-                if cmd == DISCONNECT:
-                    res = DISCONNECT
-                    conn.send(res.encode())
-                elif cmd == RESET:
-                    res = RESET
-                    conn.send(res.encode())
-                elif cmd == KILL:
-                    res = KILL
-                    conn.send(res.encode())
-                else:
-                    res = input("")
-
-            conn.close()
-    server.close()
-
-except ConnectionAbortedError:
-    print("Le connexion au client a été interrompue")
-except ConnectionResetError:
-    print("Le connexion au client a été interrompue")
-except KeyboardInterrupt:
-    print("Le connexion au client a été interrompue")
+        print('Le serveur est en attente de connexion')
+        while data != KILL and data != RESET:
+            data = ""
+            try:
+                conn, addr = server.accept()
+                print(addr)
+            except ConnectionError:
+                print("erreur de connection")
+                break
+            else:
+                while data != KILL and data != RESET and data != DISCONNECT:
+                    data = conn.recv(1024).decode()
+                    print("Commande du client: ", data)
+                    # msg = input('Enter a message to send: ')
+                    conn.send(data.encode())
+                conn.close()
+        print("Connection closed")
+        server.close()
+        print("Server closed")
