@@ -28,7 +28,7 @@ def serveur():
                 while data != KILL and data != RESET and data != DISCONNECT:
                     data = conn.recv(1024).decode()
                     print("Commande du client: ", data)
-                    # msg = input('Enter a message to send: ')
+                    # data = input('Enter a message to send: ')
                     conn.send(data.encode())
                 conn.close()
         print("Connection closed")
