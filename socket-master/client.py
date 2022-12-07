@@ -26,24 +26,24 @@ class Client():
             return 0
 
     def echange(self):
-        msg = ""
+        cmd = ""
         self.__thread = threading.Thread(target=self.__recue, args=[self.__client, ])
         self.__thread.start()
-        while msg != KILL and msg != DISCONNECT and msg != RESET:
-            msg = self.__envoi()
+        while cmd != KILL and cmd != DISCONNECT and cmd != RESET:
+            cmd = self.__envoi()
         self.__thread.join()
         self.__client.close()
 
     def __envoi(self):
-        msg = input("Commande :  ")
+        cmd = input("Commande :  ")
         try:
-            self.__client.send(msg.encode())
+            self.__client.send(cmd.encode())
         except BrokenPipeError:
             print("connection fermé")
-        return msg
+        return cmd
 
     def __recue(self, conn):
-        msg = ""
-        while msg != KILL and msg != DISCONNECT and msg != RESET:
-            msg = conn.recv(1024).decode()
-            print(msg)
+        res = ""
+        while res != KILL and res != DISCONNECT and res != RESET:
+            res = conn.recv(1024).decode()
+            print(res)
