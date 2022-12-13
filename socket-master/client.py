@@ -35,7 +35,7 @@ class Client():
         self.__client.close()
 
     def __envoi(self):
-        cmd = input("Commande :  ")
+        cmd = input("Commande :")
         try:
             self.__client.send(cmd.encode())
         except BrokenPipeError:
